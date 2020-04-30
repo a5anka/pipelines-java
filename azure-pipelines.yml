@@ -10,6 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: CacheBeta@1
+  inputs:
+    key: '"$(Agent.OS)" | **/pom.xml'
+    path: '$(HOME)/.m2'
+  displayName: "Cache mvn packages"
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -20,3 +25,5 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+- script: |
+    cat README.md
